@@ -1,26 +1,27 @@
 import express from "express";
 import dotenv from 'dotenv';
 import passport from "passport";
+import expressSession from 'express-session';
+import pkg from '../src/generated/prisma/client.js';
+const { PrismaClient } = pkg;
+import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import cors from 'cors';  
-import session from "express-session";
-import userlogin from "./login/userlogin.js";
+import signUpRoute from "./signup/signUpRoute.js";
+import "./handlePassport.js";
 dotenv.config({ path: '../.env' });
 
+const prisma = new PrismaClient();
 const app = express();
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 app.use(
   expressSession({
     cookie: {
      maxAge: 7 * 24 * 60 * 60 * 1000 // ms
     },
     secret: process.env.SECRET_PASS,
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     store: new PrismaSessionStore(
-      new PrismaClient(),
+      prisma,
       {
         checkPeriod: 2 * 60 * 1000,  //ms
         dbRecordIdIsSessionId: true,
@@ -30,12 +31,17 @@ app.use(
   })
 );
 
-
 app.use(cors({
   origin: "http://localhost:5173", 
   credentials: true
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use("/api",signUpRoute);
 
 app.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
@@ -64,3 +70,5 @@ const PORT = process.env.SERVER_PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on Port ${PORT}`);
 });
+
+export default prisma;
