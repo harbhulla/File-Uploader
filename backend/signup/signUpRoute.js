@@ -31,7 +31,6 @@ router.post("/signup", signupValidation, hashPassword, async (req, res, next) =>
     const user = await prisma.user.create({
       data: {email: req.body.input.email, password: res.locals.hashed}
     });
-    console.log(user);
      req.logIn(user, (err) => {
       if (err) return next(err);
       return res.json({ message: "Logged in!", user });

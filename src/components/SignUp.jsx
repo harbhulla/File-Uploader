@@ -1,6 +1,7 @@
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 export default function SignUp() {
+    const navigate = useNavigate();
   const [users, setUsers] = useState({
     email: '',
     password: '',
@@ -23,7 +24,7 @@ export default function SignUp() {
             const errorText = await response.text(); 
             throw new Error(`Server error: ${response.status} ${errorText}`);
         }
-              
+        navigate("/");
         } catch (error) {
         console.log("❌ fk it", error);
         }
@@ -61,9 +62,9 @@ export default function SignUp() {
         <button type="submit" className="btn btn-primary mt-4 border border-base-300">
           Create Account
         </button>
-        <p className="text-sm text-neutral-content">
+        <p className="text-sm text-black">
   Have an account?{" "}
-  <a href="/" className="link text-black underline-offset-2 hover:underline">
+  <a href="login" className="link text-black underline-offset-2 hover:underline">
     Sign in
   </a>
   </p>
