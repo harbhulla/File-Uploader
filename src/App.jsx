@@ -3,8 +3,10 @@ import SignUp from "./components/SignUp";
 import Layout from "./components/Layout";
 import LoginForm from "./components/LoginForm";
 import Home from "./components/Home";
+import { StateProvider } from './components/StateContext';
 export default function App() {
   return (
+  <StateProvider>
   <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
@@ -14,5 +16,6 @@ export default function App() {
         </Route>
       </Routes>
   </BrowserRouter>
+  </StateProvider>
   )
 };

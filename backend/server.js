@@ -10,6 +10,7 @@ import signUpRoute from "./signup/signUpRoute.js";
 import "./handlePassport.js";
 import loginRoute from "./login/userlogin.js";
 import uploadFiles from "./uploadFiles/uploadFiles.js";
+import renameFolder from "./actions/rename.js";
 
 dotenv.config({ path: '../.env' });
 
@@ -29,6 +30,7 @@ app.use(
         checkPeriod: 2 * 60 * 1000,  //ms
         dbRecordIdIsSessionId: true,
         dbRecordIdFunction: undefined,
+        log: ['query', 'info', 'warn', 'error'],
       }
     )
   })
@@ -47,6 +49,7 @@ app.use(express.json());
 app.use("/api",signUpRoute);
 app.use("/api",loginRoute);
 app.use("/api",uploadFiles);
+app.use("/api",renameFolder);
 
 
 app.post("/logout", (req, res, next) => {

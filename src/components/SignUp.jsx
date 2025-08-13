@@ -24,6 +24,8 @@ export default function SignUp() {
             const errorText = await response.text(); 
             throw new Error(`Server error: ${response.status} ${errorText}`);
         }
+        const res = await response.json();
+        console.log(res);
         navigate("/");
         } catch (error) {
         console.log("❌ fk it", error);
