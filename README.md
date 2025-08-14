@@ -1,12 +1,42 @@
-# React + Vite
+# File Uploader
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack file uploader built with React (Vite), Express (with file handling), Prisma (TypeScript ORM), and filesystem integration. Upload files, manage folders, and delete both records and physical files seamlessly.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+##  Features
 
-## Expanding the ESLint configuration
+- **React + Vite frontend** allows fast, modern UI with HMR.
+- **Express backend** handles file uploads/downloads and folder operations.
+- **Prisma ORM** connects to your database for managing folder/file metadata.
+- **File system integration**— files are saved and deleted from disk (e.g. `uploads/`).
+- Supports **Rename** and **Delete** operations on folders.
+- **Error handling** with server responses and frontend state updates.
+- Clean UI updates with React Context and state management.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+##  Tech Stack
+
+| Layer         | Technology                    |
+|---------------|-------------------------------|
+| Frontend      | React, Vite, Context API      |
+| Backend       | Node.js, Express, Multer (if used for uploads) |
+| Database ORM | Prisma (PostgreSQL / SQLite / MySQL) |
+| File System   | Node `fs.rm(...)` with absolute paths |
+
+---
+
+##  Getting Started
+
+### Prerequisites
+
+- Node.js (v16+ recommended)
+- PostgreSQL / SQLite / MySQL (match your `.env` with correct `DATABASE_URL`)
+
+### Installation
+
+1. **Clone the repo**
+   ```bash
+   git clone https://github.com/harbhulla/File-Uploader.git
+   cd File-Uploader
