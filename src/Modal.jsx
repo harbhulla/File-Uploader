@@ -5,7 +5,6 @@ export default function Modal({ content, isOpen, onClose, header }) {
   const actions = {
     Rename: { path: "renameFolder", method: "PUT" },
     Delete: { path: "deleteFolder", method: "POST" },
-    Update: { path: "updateFolder", method: "POST" },
   };
   const {
     submitButton,
@@ -16,8 +15,6 @@ export default function Modal({ content, isOpen, onClose, header }) {
     newInformation,
   } = useContext(StateContext);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append("file", input.file);
@@ -27,7 +24,6 @@ export default function Modal({ content, isOpen, onClose, header }) {
     if (!action) return;
     try {
       setLoading(true);
-      setError(null);
       const url = `http://localhost:3000/api/${action.path}`;
 
       const opts = {
@@ -41,19 +37,27 @@ export default function Modal({ content, isOpen, onClose, header }) {
         throw new Error(text || `Request failed: ${res.status}`);
       }
       const data = await res.json();
-      const newArray = newInformation.filter((item) => item.path !== path);
-      setNewInformation(() => [
-        ...newArray,
-        {
-          filename: data.files[0].name,
-          uploadTime: data.files[0].updatedAt,
-          path: data.files[0].path,
-          size: data.files[0].size,
-        },
-      ]);
+      let newArray = [];
+      console.log(submitButton);
+      if (submitButton === "Rename") {
+        newArray = newInformation.filter((item) => item.path !== path);
+        setNewInformation(() => [
+          ...newArray,
+          {
+            filename: data.files[0].name,
+            uploadTime: data.files[0].updatedAt,
+            path: data.files[0].path,
+            size: data.files[0].size,
+          },
+        ]);
+      } else {
+        newArray = newInformation.filter((item) => item.path !== path);
+        console.log(newArray);
+        setNewInformation(() => [...newArray]);
+      }
       onClose();
     } catch (e) {
-      setError(e.message || "Something went wrong");
+      console.log(e);
     } finally {
       setLoading(false);
       setInput({ name: "", file: null });
@@ -69,8 +73,6 @@ export default function Modal({ content, isOpen, onClose, header }) {
         <h3 className="font-bold text-lg mb-4">{header}</h3>
 
         <div>{content}</div>
-
-        {error && <p className="text-red-600 mt-3">{error}</p>}
 
         <button
           className="btn mt-6"

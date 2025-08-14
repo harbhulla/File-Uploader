@@ -1,7 +1,6 @@
 import Modal from "../Modal";
 import Rename from "./helperComponents/Rename";
 import Delete from "./helperComponents/Delete";
-import Update from "./helperComponents/Update";
 import { useContext, useState } from "react";
 import { StateContext } from "./StateContext";
 import useLoadData from "../customHooks/useLoadData";
@@ -76,7 +75,7 @@ export default function Information() {
                 <button
                   type="button"
                   className="cursor-pointer"
-                  onClick={(e) => handleDownload(e)}
+                  onClick={(e) => handleDownload(e, i.path)}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -126,6 +125,7 @@ export default function Information() {
                     openModal(<Delete />);
                     setModalHeader("Delete folder");
                     setSubmitButton("Delete");
+                    setPath(i.path);
                   }}
                   className="cursor-pointer"
                 >
@@ -141,30 +141,6 @@ export default function Information() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                    />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    openModal(<Update />);
-                    setModalHeader("Upload into a folder");
-                    setSubmitButton("Update");
-                  }}
-                  className="cursor-pointer"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
                     />
                   </svg>
                 </button>

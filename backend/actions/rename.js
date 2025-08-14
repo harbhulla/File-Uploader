@@ -1,7 +1,6 @@
 import express from "express";
 import fs from "fs";
-import { fileURLToPath } from "url";
-import path, { dirname } from "path";
+import path from "path";
 import prisma from "../server.js";
 import multer from "multer";
 
@@ -19,7 +18,7 @@ function transformString(str, newName) {
   return [newStr, newPath, currentFolderName, "/uploads/" + newName];
 }
 
-router.put("/renameFolder", upload.none(), async (req, res, next) => {
+router.put("/renameFolder", upload.none(), async (req, res) => {
   try {
     const [newStr, newPath, currentFolderName, futureFolderName] =
       transformString(req.body.path, req.body.name);
@@ -45,11 +44,8 @@ router.put("/renameFolder", upload.none(), async (req, res, next) => {
       },
       include: { files: true },
     });
-    console.log(newStr, newPath);
     const currentPath = path.join(process.cwd(), currentFolderName);
     const futurePath = path.join(process.cwd(), futureFolderName);
-    console.log("currentPath: ", currentPath);
-    console.log("futurePath: ", futurePath);
     fs.rename(currentPath, futurePath, (err) => {
       if (err) next(err);
       console.log("Renamed!");
@@ -57,7 +53,8 @@ router.put("/renameFolder", upload.none(), async (req, res, next) => {
 
     res.json(folder);
   } catch (err) {
-    next(err);
+    console.error("❌ Error renaming file:", err);
+    res.status(500).json({ error: "Rename failed" });
   }
 });
 

@@ -1,28 +1,10 @@
-import { useState, useRef, useEffect, useContext } from "react";
+import { useState, useRef, useContext, useEffect } from "react";
 import Information from "./Information";
 import { StateContext } from "./StateContext";
 export default function Home() {
   const fileInputRef = useRef(null);
   const { setNewInformation, newInformation } = useContext(StateContext);
   const [fileDescription, setFileDescription] = useState({ name: "" });
-
-  const [newData, setNewData] = useState({
-    filename: "",
-    uploadTime: "",
-    path: "",
-    size: 0,
-  });
-
-  useEffect(() => {
-    const isEmpty =
-      !newData ||
-      Object.values(newData).every(
-        (value) => value === "" || value === 0 || value === null
-      );
-
-    if (isEmpty) return;
-    setNewInformation((prev) => [...prev, newData]);
-  }, [newData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,16 +24,16 @@ export default function Home() {
         throw new Error(`Server error: ${response.status} ${errorText}`);
       }
       const data = await response.json();
-      for (const arr in data) {
-        setNewData((prev) => ({
-          ...prev,
-          filename: data[arr].files[0].name,
-          uploadTime: data[arr].files[0].updatedAt,
-          path: data[arr].files[0].path,
-          size: data[arr].files[0].size,
-        }));
-        await new Promise((r) => setTimeout(r, 0));
-      }
+
+      const parsed = data.flatMap((item) =>
+        (item?.files ?? []).map((file) => ({
+          filename: file.name,
+          uploadTime: file.updatedAt,
+          path: file.path,
+          size: file.size,
+        }))
+      );
+      setNewInformation(parsed);
     } catch (error) {
       console.log("❌ fk it", error);
     }
@@ -129,11 +111,7 @@ export default function Home() {
                   <p className="text-sm mt-1 text-gray-500">Max size 2MB</p>
                 </div>
               </div>
-              <button
-                className="btn mt-6"
-                onClick={() => document.getElementById("my_modal_5").close()}
-                type="submit"
-              >
+              <button className="btn mt-6" type="submit">
                 Upload
               </button>
               <div className="modal-action mt-6">

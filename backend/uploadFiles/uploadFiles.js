@@ -25,7 +25,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     const newPath = path.join(userFolder, req.file.originalname);
     fs.renameSync(oldPath, newPath);
 
-    const createFolder = await prisma.folder.create({
+    await prisma.folder.create({
       data: {
         name: req.body.name,
         user: {

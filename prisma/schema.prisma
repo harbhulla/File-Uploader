@@ -29,7 +29,7 @@ model Folder {
   id        String   @id @default(uuid())
   name      String
   userEmail String
-  user      User     @relation("UserFolders", fields: [userEmail], references: [email])
+  user      User     @relation("UserFolders", fields: [userEmail], references: [email], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   files     File[]
@@ -47,5 +47,6 @@ model File {
   path      String   @unique
   size      String
   folderId  String
-  folder    Folder   @relation(fields: [folderId], references: [id])
+  folder   Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
 }

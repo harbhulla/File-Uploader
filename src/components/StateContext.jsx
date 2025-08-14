@@ -8,7 +8,6 @@ export function StateProvider({ children }) {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [path, setPath] = useState("");
   const [submitButton, setSubmitButton] = useState("");
-  const [trigger, setTrigger] = useState(0);
   return (
     <StateContext.Provider
       value={{
@@ -22,8 +21,6 @@ export function StateProvider({ children }) {
         setPath,
         submitButton,
         setSubmitButton,
-        trigger,
-        setTrigger,
       }}
     >
       {children}
